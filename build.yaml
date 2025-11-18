@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      floor_generator:
+        options:
+          generate_async: true
+
