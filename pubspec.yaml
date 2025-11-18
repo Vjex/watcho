@@ -54,6 +54,7 @@ dependencies:
   
   # Navigation & Deep Linking
   go_router: ^13.0.0
+  app_links: ^6.3.1
   
   # Utilities
   intl: ^0.19.0

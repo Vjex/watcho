@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../viewmodels/movie_details_viewmodel.dart';
-import '../../core/constants/app_constants.dart';
+import '../../core/services/deep_link_service.dart';
 import '../../core/di/dependency_injection.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
@@ -30,12 +30,26 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     });
   }
 
-  void _shareMovie() {
+  void _shareMovie() async {
     final movie = _viewModel.movie;
     if (movie != null) {
-      final deepLink = '${AppConstants.deepLinkScheme}://${AppConstants.deepLinkHost}/${movie.id}';
-      final shareText = 'Check out ${movie.title}!\n$deepLink';
-      Share.share(shareText);
+      try {
+        final deepLink = DeepLinkService.generateMovieDeepLink(movie.id);
+        // Format the share text with the HTTPS link on its own line
+        // HTTPS URLs are more likely to be recognized as clickable in messaging apps
+        final shareText = 'Check out ${movie.title}!\n\n$deepLink\n\nTap the link above to open in Watcho app';
+        
+        // Share the text with the HTTPS deep link
+        // HTTPS URLs are clickable in SMS and most messaging apps
+        await Share.share(shareText);
+      } catch (e) {
+        // Handle error - show snackbar or log
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error sharing: ${e.toString()}')),
+          );
+        }
+      }
     }
   }
 
@@ -188,4 +202,3 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     );
   }
 }
-

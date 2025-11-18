@@ -254,17 +254,6 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
-  Future<void> updateBookmarkStatusWithTimestamp(
-    int id,
-    bool isBookmarked,
-    int lastUpdated,
-  ) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE movies SET isBookmarked = ?2, last_updated = ?3 WHERE id = ?1',
-        arguments: [id, isBookmarked ? 1 : 0, lastUpdated]);
-  }
-
-  @override
   Future<void> deleteOldTrendingMovies() async {
     await _queryAdapter.queryNoReturn(
         'DELETE FROM movies WHERE isTrending = 1 AND isNowPlaying = 0 AND isBookmarked = 0');

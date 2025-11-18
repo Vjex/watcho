@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/di/dependency_injection.dart';
-import 'presentation/screens/main_screen.dart';
+import 'core/router/app_router.dart';
+import 'core/handlers/deep_link_handler.dart';
 import 'presentation/viewmodels/home_viewmodel.dart';
 import 'presentation/viewmodels/search_viewmodel.dart';
 import 'presentation/viewmodels/bookmarks_viewmodel.dart';
@@ -12,11 +13,28 @@ void main() async {
   // Initialize dependencies
   await DependencyInjection.setup();
   
-  runApp(const MyApp());
+  // Initialize deep link handler
+  final deepLinkHandler = DeepLinkHandler();
+  await deepLinkHandler.initialize();
+  
+  runApp(MyApp(deepLinkHandler: deepLinkHandler));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final DeepLinkHandler deepLinkHandler;
+  
+  const MyApp({super.key, required this.deepLinkHandler});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    widget.deepLinkHandler.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +52,7 @@ class MyApp extends StatelessWidget {
           create: (_) => BookmarksViewModel(movieRepository),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Watcho',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -44,7 +62,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: const MainScreen(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

@@ -45,5 +45,21 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.inshort.watcho</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>watcho</string>
+			</array>
+		</dict>
+	</array>
+	<!-- Note: Universal Links for HTTPS URLs are handled by app_links package -->
+	<!-- For full Universal Links support, you would need to configure Associated Domains -->
+	<!-- and host an apple-app-site-association file at https://watcho.app/.well-known/apple-app-site-association -->
 </dict>
 </plist>
