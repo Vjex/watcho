@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../viewmodels/movie_details_viewmodel.dart';
+import '../viewmodels/bookmarks_viewmodel.dart';
 import '../../core/services/deep_link_service.dart';
 import '../../core/di/dependency_injection.dart';
 
@@ -50,6 +51,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           );
         }
       }
+    }
+  }
+
+  Future<void> _handleBookmarkToggle(MovieDetailsViewModel viewModel) async {
+    await viewModel.toggleBookmark();
+    if (!mounted) return;
+    final bookmarksViewModel = context.read<BookmarksViewModel?>();
+    if (bookmarksViewModel != null) {
+      await bookmarksViewModel.loadBookmarkedMovies();
     }
   }
 
@@ -115,7 +125,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           : Icons.bookmark_border,
                       color: Colors.white,
                     ),
-                    onPressed: () => viewModel.toggleBookmark(),
+                    onPressed: () => _handleBookmarkToggle(viewModel),
                   ),
                   IconButton(
                     icon: const Icon(Icons.share, color: Colors.white),

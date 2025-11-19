@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:floor/floor.dart';
 import '../../data/datasources/remote/tmdb_api_service.dart';
 import '../../data/datasources/remote/movie_remote_datasource.dart';
 import '../../data/datasources/local/movie_local_datasource.dart';
@@ -17,27 +16,27 @@ class DependencyInjection {
     final database = await $FloorAppDatabase
         .databaseBuilder(AppConstants.databaseName)
         .addMigrations([
-          // Migration from version 1 to 2: Add last_updated column
-          Migration(1, 2, (database) async {
-            // Check if column already exists by querying the schema
-            final result = await database.rawQuery(
-              "PRAGMA table_info(movies)",
-            );
-            final hasLastUpdated = result.any((row) => row['name'] == 'last_updated');
+          // // Migration from version 1 to 2: Add last_updated column
+          // Migration(1, 2, (database) async {
+          //   // Check if column already exists by querying the schema
+          //   final result = await database.rawQuery(
+          //     "PRAGMA table_info(movies)",
+          //   );
+          //   final hasLastUpdated = result.any((row) => row['name'] == 'last_updated');
             
-            if (!hasLastUpdated) {
-              // SQLite doesn't support adding NOT NULL columns directly
-              // So we add it as nullable first, then update existing rows
-              await database.execute(
-                'ALTER TABLE movies ADD COLUMN last_updated INTEGER',
-              );
-              // Update existing rows with current timestamp
-              final currentTime = DateTime.now().millisecondsSinceEpoch;
-              await database.execute(
-                'UPDATE movies SET last_updated = $currentTime WHERE last_updated IS NULL',
-              );
-            }
-          }),
+          //   if (!hasLastUpdated) {
+          //     // SQLite doesn't support adding NOT NULL columns directly
+          //     // So we add it as nullable first, then update existing rows
+          //     await database.execute(
+          //       'ALTER TABLE movies ADD COLUMN last_updated INTEGER',
+          //     );
+          //     // Update existing rows with current timestamp
+          //     final currentTime = DateTime.now().millisecondsSinceEpoch;
+          //     await database.execute(
+          //       'UPDATE movies SET last_updated = $currentTime WHERE last_updated IS NULL',
+          //     );
+          //   }
+          // }),
         ])
         .build();
 

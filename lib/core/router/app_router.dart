@@ -61,6 +61,8 @@ class AppRouter {
     // Only go to home if not already there
     if (router.routerDelegate.currentConfiguration.uri.path != '/') {
       router.go('/');
+
+      
     }
   }
 }

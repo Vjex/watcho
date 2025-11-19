@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (_) => BookmarksViewModel(movieRepository),
-        ),
+        ),  
       ],
       child: MaterialApp.router(
         title: 'Watcho',
